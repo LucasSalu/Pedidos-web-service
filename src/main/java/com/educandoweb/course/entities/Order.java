@@ -12,13 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 
 import com.educandoweb.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -75,13 +71,9 @@ public class Order implements Serializable {
 		this.payment = payment;
 	}
 
-	
-	
-	
 	public Set<OrderItem> getItems() {
 		return items;
 	}
-
 
 	public Long getId() {
 		return id;
@@ -98,6 +90,17 @@ public class Order implements Serializable {
 	public void setMoment(Instant moment) {
 		this.moment = moment;
 	}
+	
+	public Double getTotal() {
+		double total = 0.0;
+		for(OrderItem item : this.items ) {
+			total += item.getSubTotal();
+		}
+		
+		return total;
+	}
+	
+
 
 	public User getClient() {
 		return client;
@@ -116,7 +119,6 @@ public class Order implements Serializable {
 	public void setOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus = orderStatus.getCode();
 	}
-	
 	
 
 	@Override

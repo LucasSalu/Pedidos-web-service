@@ -35,6 +35,11 @@ public class OrderItem {
 		id.setOrder(order);
 		
 	}
+	public Double  getSubTotal() {
+		return price * quantity;
+		 
+		
+	}
 
 	public Product getProduct() {
 		return id.getProduct();	
@@ -67,6 +72,7 @@ public class OrderItem {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {

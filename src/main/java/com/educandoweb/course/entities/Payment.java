@@ -11,6 +11,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "tb_payment")
 public class Payment implements Serializable {
@@ -37,21 +39,11 @@ public class Payment implements Serializable {
 	private Long id;
 	private Instant date;
 	
+	@JsonIgnore
 	@OneToOne
 	@MapsId
 	private Order order;
 	
-
-
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((date == null) ? 0 : date.hashCode());
-		return result;
-	}
-
 
 	public Long getId() {
 		return id;
@@ -88,5 +80,15 @@ public class Payment implements Serializable {
 			return false;
 		return true;
 	}
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		return result;
+	}
+
 
 }
