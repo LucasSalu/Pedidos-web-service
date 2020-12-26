@@ -1,6 +1,9 @@
 package com.educandoweb.course.services;
+
 import java.util.List;
 import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,17 +17,17 @@ import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class UserService {
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
-	public List<User> findAll(){
+
+	public List<User> findAll() {
 		return userRepository.findAll();
 	}
-	
+
 	public User findById(Long id) {
 		Optional<User> obj = userRepository.findById(id);
-		return obj.orElseThrow(() -> new ResourceNotFoundException(id));	
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 
 	public User insert(User obj) {
@@ -38,22 +41,30 @@ public class UserService {
 			throw new ResourceNotFoundException(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new DatabaseException(e.getLocalizedMessage());
-			
+
 		}
 
 	}
-	
+
 	public User update(Long id, User obj) {
 		User entity = userRepository.getOne(id);
-		updateData(entity, obj);
+		try {
+
+			updateData(entity, obj);
+
+		} catch (EntityNotFoundException e) {
+
+			throw new ResourceNotFoundException(id);
+
+		}
 		return userRepository.save(entity);
 	}
-	
+
 	private void updateData(User entity, User obj) {
 		entity.setName(obj.getName());
-        entity.setEmail(obj.getEmail());
-        entity.setPhone(obj.getPhone());
-		
+		entity.setEmail(obj.getEmail());
+		entity.setPhone(obj.getPhone());
+
 	}
-	
+
 }
